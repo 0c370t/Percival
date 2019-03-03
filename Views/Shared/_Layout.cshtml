@@ -12,29 +12,25 @@
   <title>Percival - @ViewData["title"]</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script>
-  function goHome(){
-    // This function stops the user from accidentally clicking the header and reloading all the data
-    if('@ViewData["Title"]' != "Home")
-      window.location.href="/";
-  }
-
-
-  </script>
 </head>
 
 <body class="text-center">
-  <header class="jumbotron">
-    <div class="container">
-      <a href="#" onclick="goHome()"><h1>Percival</h1></a>
-      <p>
-        ASP.NET MVC/JQuery SpaceX Data Aggregator
-      </p>
-    </div>
-  </header>
-  <main role="main" class="container-fluid">
-    @RenderBody()
-  </main>
+    <header class="jumbotron">
+        <div class="container">
+            <a id="mainLink" href="#"><h1>Percival</h1></a>
+            <p>
+                ASP.NET MVC/JQuery SpaceX Data Aggregator
+            </p>
+        </div>
+    </header>
+    <main role="main" class="container-fluid">
+        @RenderBody()
+    </main>
+    <script>
+      // This function prevents user from clicking main header to reload home page
+          if ("@ViewData["title"]" != "Home")
+              document.getElementById('mainLink').setAttribute("href", "/");
+    </script>
 </body>
 
 </html>
