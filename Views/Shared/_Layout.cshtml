@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.common.min.css" />
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.uniform.min.css" />
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.uniform.mobile.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="/js/kendo.all.min.js"></script>
+  <title>Percival - @ViewData["title"]</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script>
+  function goHome(){
+    // This function stops the user from accidentally clicking the header and reloading all the data
+    if('@ViewData["Title"]' != "Home")
+      window.location.href="/";
+  }
+
+
+  </script>
+</head>
+
+<body class="text-center">
+  <header class="jumbotron">
+    <div class="container">
+      <a href="#" onclick="goHome()"><h1>Percival</h1></a>
+      <p>
+        ASP.NET MVC/JQuery SpaceX Data Aggregator
+      </p>
+    </div>
+  </header>
+  <main role="main" class="container-fluid">
+    @RenderBody()
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+@{
+ViewData["Title"] = "Home";
+Layout = "_Layout";
+}
+<div id="grid" style="">
+  <img class="img-responsive" id="preload" src="/img/ico/loading.gif" alt="Loading, please wait" style="margin: 0 auto;"/>
+</div>
+<script>
+  var debugboy;
+  var ajaxResults = $.ajax({
+    'url': 'https://api.spacexdata.com/v3/launches/',
+    'type': 'GET',
+    'success': function(data) {
+      ajaxResults = data;
+      $('#preload').remove();
+      ajaxComplete();
+    }
+  });
+
+  function ajaxComplete() {
+    $("#grid").kendoGrid({
+      dataSource: {
+        data: ajaxResults,
+      },
+      dataBound: function() {
+        for (var i = 0; i < this.columns.length; i++) {
+          this.autoFitColumn(i);
+        }
+      },
+      sortable: true,
+      scrollable: true,
+      height: "60%",
+      columns: [{
+          field: "links.mission_patch_small",
+          title: " ",
+          sortable: false,
+          template: function(x) {
+            if (x['links']['mission_patch_small'] == null)
+              return "";
+            else if (x['links']['wikipedia'] == null)
+              return "<img src='" + x['links']['mission_patch_small'] + "' width='25px' alt='' />"
+            else
+              return "<a target='_blank' href='" + x['links']['wikipedia'] + "'><img src='" + x['links']['mission_patch_small'] + "' width='25px' alt='' /></a>"
+          }
+        },
+        {
+          field: "flight_number",
+          title: "#"
+        },
+        {
+          field: "mission_name",
+          title: "Mission Name"
+        },
+        {
+          field: "launch_date_utc",
+          title: "Launch Date",
+          template: function(x) {
+            y = new Date(x['launch_date_utc']);
+            return y.toLocaleDateString('us-EN',{timeZone:'America/Chicago'})
+          }
+        },
+        {
+          field: "launch_date_utc",
+          title: "Launch Time",
+          template: function(x) {
+            y = new Date(x['launch_date_utc']);
+            return y.toLocaleTimeString('us-EN',{timeZone:'America/Chicago'})
+          }
+        },
+        {
+          field: "rocket.rocket_name",
+          title: "Rocket Name"
+        },
+        {
+          field: "rocket.rocket_type",
+          title: "Rocket Type"
+        },
+        {
+          field: "launch_success",
+          title: "Success",
+          template: function(x) {
+            if (x['launch_success'] == true) {
+              return "<strong>Success</strong>";
+            } else if (x['launch_success'] == false) {
+              return "<abbr title='" + x['launch_failure_details']['reason'] + "'>Failure</abbr>";
+            } else {
+              return "<span>Scheduled</span>";
+            }
+          },
+          values: [{
+              text: "Success",
+              value: true
+            },
+            {
+              text: "Failure",
+              value: false
+            },
+            {
+              text: "Scheduled",
+              value: null
+            }
+          ]
+        }, {
+          command: [{
+            name: "Cargo Manifest",
+            click: function(e) {
+              var id = e.currentTarget.parentElement.parentElement.children[1].textContent;
+              window.location.href = "/Launch/Details/" + id;
+            }
+          }]
+        }
+      ]
+    });
+  };
+</script>

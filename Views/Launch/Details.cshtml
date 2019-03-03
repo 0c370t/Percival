@@ -1,0 +1,146 @@
+@{
+ViewData["title"] = "Details";
+Layout = "_Layout";
+}
+
+<img id="mission_patch" alt="Missing Mission Patch" />
+
+<h3 id="bodyHeader" class="text-primary">
+  Details for
+</h3>
+<div id="info" class="percival-grid"></div>
+
+<h3 class="text-primary">
+  Inventory Manifest
+</h3>
+</div>
+<div id="manifest" class="percival-grid" >
+  <img id="preload" src="/img/ico/loading.gif" alt="Loading, please wait" />
+</div>
+
+<script>
+  function createInfoSection(areaTitle,sectionTitle) {
+    containerElement = document.getElementById(areaTitle);
+    outputElement = document.createElement('section');
+    headerElement = document.createElement('h4');
+    headerElement.textContent = sectionTitle;
+
+    innerContainer = document.createElement('div');
+    innerContainer.classList += "row-flex";
+    innerContainer.setAttribute("id",areaTitle+"_"+sectionTitle.replace(' ',''));
+
+    outputElement.appendChild(headerElement);
+    outputElement.appendChild(innerContainer);
+    containerElement.appendChild(outputElement);
+  }
+  function addLinkToInfoSection(areaTitle, sectionTitle,href,innerText) {
+    if(href == "" || href == null) return;
+    newLink = document.createElement('a');
+    newLink.setAttribute('href',href);
+    newLink.setAttribute('target',"_blank");
+    newLink.textContent = innerText;
+    document.getElementById(areaTitle+"_"+sectionTitle.replace(' ','')).appendChild(newLink);
+  }
+  function addDivToInfoSection(areaTitle, sectionTitle, divObject){
+    document.getElementById(areaTitle+"_"+sectionTitle.replace(' ','')).appendChild(divObject);
+  }
+  function addItemToInfoSection(areaTitle, sectionTitle, rowHeader, rowData){
+    if(rowData == "" || rowData == null) return;
+    headerElement = document.createElement('span');
+    headerElement.style.display = "block";
+    headerElement.style.width = "100%";
+    headerElement.style.fontWeight = "bold";
+    headerElement.textContent = rowHeader;
+
+    dataElement = document.createElement('span');
+    dataElement.style.display = "block";
+    dataElement.style.width = "100%";
+    dataElement.textContent = rowData;
+
+    containerElement = document.createElement('div');
+    containerElement.appendChild(headerElement);
+    containerElement.appendChild(dataElement);
+    addDivToInfoSection(areaTitle, sectionTitle.replace(' ',''), containerElement);
+  }
+  function addRowToInfoSection(areaTitle, sectionTitle, rowHeader, rowData){
+    if(rowData == "" || rowData == null) return;
+    headerElement = document.createElement('span');
+    headerElement.style.display = "block";
+    headerElement.style.width = "100%";
+    headerElement.style.fontWeight = "bold";
+    headerElement.textContent = rowHeader;
+
+    dataElement = document.createElement('span');
+    dataElement.style.display = "block";
+    dataElement.style.width = "100%";
+    dataElement.textContent = rowData;
+
+    containerElement = document.createElement('div');
+    containerElement.style.width = "100%";
+    containerElement.appendChild(headerElement);
+    containerElement.appendChild(dataElement);
+    addDivToInfoSection(areaTitle, sectionTitle.replace(' ',''), containerElement);
+  }
+  var ajaxResults = $.ajax({
+    'url': 'https://api.spacexdata.com/v3/launches/@ViewData["id"]',
+    'type': 'GET',
+    'success': function(data) {
+      ajaxResults = data;
+      $('#preload').remove();
+      ajaxComplete();
+    }
+  });
+
+  function ajaxComplete() {
+    // Construct Header stuff
+    var links = ajaxResults['links']
+    // Mission Patch
+    document.getElementById('bodyHeader').textContent += " " + ajaxResults['mission_name'];
+    document.getElementById('mission_patch').setAttribute('src', links['mission_patch']);
+    // Construct info div manually here
+    launchDate = new Date(ajaxResults['launch_date_utc']);
+    createInfoSection("info","Launch Details");
+    addItemToInfoSection("info", "Launch Details","Mission Name",ajaxResults['mission_name']);
+    addItemToInfoSection("info", "Launch Details","Flight Number",ajaxResults['flight_number']);
+    addItemToInfoSection("info", "Launch Details","Launch Date", launchDate.toLocaleDateString('us-EN',{timeZone:'America/Chicago'}));
+    addItemToInfoSection("info", "Launch Details","Launch Time", launchDate.toLocaleTimeString('us-EN',{timeZone:'America/Chicago'}));
+    addItemToInfoSection("info", "Launch Details","Rocket Name", ajaxResults['rocket']['rocket_name']);
+    addItemToInfoSection("info", "Launch Details","Rocket Type", ajaxResults['rocket']['rocket_type']);
+    addItemToInfoSection("info", "Launch Details","Launch Site", ajaxResults['launch_site']['site_name']);
+    if(ajaxResults['launch_success'] == true)
+      addItemToInfoSection("info", "Launch Details","Launch Success", "Success");
+    else if (ajaxResults['launch_success'] == false){
+      addItemToInfoSection("info", "Launch Details","Launch Success", "Failure");
+      addItemToInfoSection("info", "Launch Details","Launch Failure Reason", ajaxResults['launch_failure_details']['reason']);
+    }
+    else
+      addItemToInfoSection("info", "Launch Details","Launch Success", "Scheduled");
+    addRowToInfoSection("info", "Launch Details","Additional Info", ajaxResults['details']);
+
+    createInfoSection("info","Links");
+    addLinkToInfoSection("info", "Links",links['wikipedia'],"Wikipedia");
+    addLinkToInfoSection("info", "Links",links['video_link'],"Video");
+    addLinkToInfoSection("info", "Links",links['reddit_campaign'],"Reddit (Campaign)");
+    addLinkToInfoSection("info", "Links",links['reddit_launch'],"Reddit (Launch)");
+    addLinkToInfoSection("info", "Links",links['reddit_recovery'],"Reddit (Recovery)");
+    addLinkToInfoSection("info", "Links",links['reddit_media'],"Reddit (Media)");
+    addLinkToInfoSection("info", "Links",links['presskit'],"Press Kit");
+
+    var payloads = ajaxResults["rocket"]["second_stage"]["payloads"];
+    for(i=0;i<payloads.length;i++){
+      payload = payloads[i];
+      payloadId = payload['payload_id']
+      createInfoSection("manifest",payloadId);
+      addItemToInfoSection("manifest",payloadId,"Payload Name",payloadId);
+      addItemToInfoSection("manifest",payloadId,"Nationality",payload['nationality']);
+      addItemToInfoSection("manifest",payloadId,"Manufacturer",payload['Manufacturer']);
+      customers = ""
+      for(let customer of payload['customers'])
+        customers += customer +", ";
+      addItemToInfoSection("manifest",payloadId,"Customer(s)",customers.substring(0,customers.length-2));
+      addItemToInfoSection("manifest",payloadId,"Payload Mass (kg)",payload['payload_mass_kg']);
+      addItemToInfoSection("manifest",payloadId,"Type of Object",payload['payload_type']);
+      addItemToInfoSection("manifest",payloadId,"Target Orbit", payload['orbit']);
+    }
+  }
+</script>
