@@ -55,16 +55,24 @@ Layout = "_Layout";
           field: "launch_date_utc",
           title: "Launch Date",
           template: function(x) {
-            y = new Date(x['launch_date_utc']);
-            return y.toLocaleDateString('us-EN',{timeZone:'America/Chicago'})
+              y = new Date(x['launch_date_utc']);
+              try {
+                  return y.toLocaleDateString('us-EN', { timeZone: 'America/Chicago' })
+              } catch (err) {
+                  return y.toLocaleDateString('us-EN', { timeZone: 'UTC' })
+              }
           }
         },
         {
           field: "launch_date_utc",
           title: "Launch Time",
           template: function(x) {
-            y = new Date(x['launch_date_utc']);
-            return y.toLocaleTimeString('us-EN',{timeZone:'America/Chicago'})
+              y = new Date(x['launch_date_utc']);
+              try {
+                  return y.toLocaleTimeString('us-EN', { timeZone: 'America/Chicago' });
+              } catch (err) {
+                  return y.toLocaleTimeString('us-EN', { timeZone: 'UTC' });
+              }
           }
         },
         {

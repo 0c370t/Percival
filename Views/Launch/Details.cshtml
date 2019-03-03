@@ -26,7 +26,7 @@ Layout = "_Layout";
     headerElement.textContent = sectionTitle;
 
     innerContainer = document.createElement('div');
-    innerContainer.classList += "row-flex";
+      innerContainer.setAttribute("class","row-flex");
     innerContainer.setAttribute("id",areaTitle+"_"+sectionTitle.replace(' ',''));
 
     outputElement.appendChild(headerElement);
@@ -93,7 +93,7 @@ Layout = "_Layout";
 
   function ajaxComplete() {
     // Construct Header stuff
-    var links = ajaxResults['links']
+      var links = ajaxResults['links'];
     // Mission Patch
     document.getElementById('bodyHeader').textContent += " " + ajaxResults['mission_name'];
     document.getElementById('mission_patch').setAttribute('src', links['mission_patch']);
@@ -101,9 +101,17 @@ Layout = "_Layout";
     launchDate = new Date(ajaxResults['launch_date_utc']);
     createInfoSection("info","Launch Details");
     addItemToInfoSection("info", "Launch Details","Mission Name",ajaxResults['mission_name']);
-    addItemToInfoSection("info", "Launch Details","Flight Number",ajaxResults['flight_number']);
-    addItemToInfoSection("info", "Launch Details","Launch Date", launchDate.toLocaleDateString('us-EN',{timeZone:'America/Chicago'}));
-    addItemToInfoSection("info", "Launch Details","Launch Time", launchDate.toLocaleTimeString('us-EN',{timeZone:'America/Chicago'}));
+      addItemToInfoSection("info", "Launch Details", "Flight Number", ajaxResults['flight_number']);
+      try {
+          addItemToInfoSection("info", "Launch Details", "Launch Date", launchDate.toLocaleDateString('us-EN', { timeZone: 'America/Chicago' }));
+      } catch (err) {
+          addItemToInfoSection("info", "Launch Details", "Launch Date", launchDate.toLocaleDateString('us-EN', { timeZone: 'UTC' }));
+      }
+      try {
+          addItemToInfoSection("info", "Launch Details", "Launch Time", launchDate.toLocaleTimeString('us-EN', { timeZone: 'America/Chicago' }));
+      } catch (err) {
+          addItemToInfoSection("info", "Launch Details", "Launch Time", launchDate.toLocaleTimeString('us-EN', { timeZone: 'UTC' }));
+      }
     addItemToInfoSection("info", "Launch Details","Rocket Name", ajaxResults['rocket']['rocket_name']);
     addItemToInfoSection("info", "Launch Details","Rocket Type", ajaxResults['rocket']['rocket_type']);
     addItemToInfoSection("info", "Launch Details","Launch Site", ajaxResults['launch_site']['site_name']);
@@ -129,14 +137,16 @@ Layout = "_Layout";
     var payloads = ajaxResults["rocket"]["second_stage"]["payloads"];
     for(i=0;i<payloads.length;i++){
       payload = payloads[i];
-      payloadId = payload['payload_id']
+      payloadId = payload['payload_id'];
       createInfoSection("manifest",payloadId);
       addItemToInfoSection("manifest",payloadId,"Payload Name",payloadId);
       addItemToInfoSection("manifest",payloadId,"Nationality",payload['nationality']);
       addItemToInfoSection("manifest",payloadId,"Manufacturer",payload['Manufacturer']);
-      customers = ""
-      for(let customer of payload['customers'])
-        customers += customer +", ";
+      customers = "";
+        for (i = 0; i < payload['customers'].length; i++) {
+            customer = payload['customers'][i]
+            customers += customer + ", ";
+        }
       addItemToInfoSection("manifest",payloadId,"Customer(s)",customers.substring(0,customers.length-2));
       addItemToInfoSection("manifest",payloadId,"Payload Mass (kg)",payload['payload_mass_kg']);
       addItemToInfoSection("manifest",payloadId,"Type of Object",payload['payload_type']);

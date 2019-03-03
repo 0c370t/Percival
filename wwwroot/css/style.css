@@ -20,11 +20,12 @@ div.row-flex{
   width:50%;
   margin:0 auto;
 }
-div.row-flex > * {
-  flex-grow:1;
-  padding:1rem;
-  min-width:calc(100%/3);
-}
+    div.row-flex > a, div.row-flex > div {
+        flex-grow: 1;
+        padding: 1rem;
+        min-width: calc(100%/3);
+        display: block;
+    }
 div.row-flex > a:hover,div.row-flex > div:hover {
   background-color:rgba(0,0,0,0.2);
 }
