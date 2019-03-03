@@ -94,9 +94,13 @@ Layout = "_Layout";
   function ajaxComplete() {
     // Construct Header stuff
       var links = ajaxResults['links'];
-    // Mission Patch
+    // Mission Name
     document.getElementById('bodyHeader').textContent += " " + ajaxResults['mission_name'];
-    document.getElementById('mission_patch').setAttribute('src', links['mission_patch']);
+    // Mission Patch
+      if (links['mission_patch'] != "" && links['mission_patch'] != null)
+          document.getElementById('mission_patch').setAttribute('src', links['mission_patch']);
+      else
+          $('#mission_patch').remove();
     // Construct info div manually here
     launchDate = new Date(ajaxResults['launch_date_utc']);
     createInfoSection("info","Launch Details");
