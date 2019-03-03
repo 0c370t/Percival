@@ -27,7 +27,7 @@ Layout = "_Layout";
 
     innerContainer = document.createElement('div');
       innerContainer.setAttribute("class","row-flex");
-    innerContainer.setAttribute("id",areaTitle+"_"+sectionTitle.replace(' ',''));
+    innerContainer.setAttribute("id",areaTitle+"_"+sectionTitle.replace(/ /g,''));
 
     outputElement.appendChild(headerElement);
     outputElement.appendChild(innerContainer);
@@ -39,10 +39,10 @@ Layout = "_Layout";
     newLink.setAttribute('href',href);
     newLink.setAttribute('target',"_blank");
     newLink.textContent = innerText;
-    document.getElementById(areaTitle+"_"+sectionTitle.replace(' ','')).appendChild(newLink);
+    document.getElementById(areaTitle+"_"+sectionTitle.replace(/ /g,'')).appendChild(newLink);
   }
   function addDivToInfoSection(areaTitle, sectionTitle, divObject){
-    document.getElementById(areaTitle+"_"+sectionTitle.replace(' ','')).appendChild(divObject);
+    document.getElementById(areaTitle+"_"+sectionTitle.replace(/ /g,'')).appendChild(divObject);
   }
   function addItemToInfoSection(areaTitle, sectionTitle, rowHeader, rowData){
     if(rowData == "" || rowData == null) return;
@@ -60,7 +60,7 @@ Layout = "_Layout";
     containerElement = document.createElement('div');
     containerElement.appendChild(headerElement);
     containerElement.appendChild(dataElement);
-    addDivToInfoSection(areaTitle, sectionTitle.replace(' ',''), containerElement);
+    addDivToInfoSection(areaTitle, sectionTitle.replace(/ /g,''), containerElement);
   }
   function addRowToInfoSection(areaTitle, sectionTitle, rowHeader, rowData){
     if(rowData == "" || rowData == null) return;
@@ -79,7 +79,7 @@ Layout = "_Layout";
     containerElement.style.width = "100%";
     containerElement.appendChild(headerElement);
     containerElement.appendChild(dataElement);
-    addDivToInfoSection(areaTitle, sectionTitle.replace(' ',''), containerElement);
+    addDivToInfoSection(areaTitle, sectionTitle.replace(/ /g,''), containerElement);
   }
   var ajaxResults = $.ajax({
     'url': 'https://api.spacexdata.com/v3/launches/@ViewData["id"]',
