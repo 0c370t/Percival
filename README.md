@@ -12,6 +12,7 @@
 
 ### Windows
 - Ensure you have Visual Studio installed
+- Ensure you have .NET Core 2.2 installed (https://dotnet.microsoft.com/download/dotnet-core/2.2)
 - Clone or download the repo
 - Open Percival/Percival.csproj as a project in Visual Studio
 - Run the project, Visual Studio should open a browser and direct you to the page
