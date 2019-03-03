@@ -146,12 +146,8 @@ Layout = "_Layout";
       addItemToInfoSection("manifest",payloadId,"Payload Name",payloadId);
       addItemToInfoSection("manifest",payloadId,"Nationality",payload['nationality']);
       addItemToInfoSection("manifest",payloadId,"Manufacturer",payload['Manufacturer']);
-      customers = "";
-        for (i = 0; i < payload['customers'].length; i++) {
-            customer = payload['customers'][i]
-            customers += customer + ", ";
-        }
-      addItemToInfoSection("manifest",payloadId,"Customer(s)",customers.substring(0,customers.length-2));
+      customers = payload['customers'].join(", ");
+      addItemToInfoSection("manifest",payloadId,"Customer(s)",customers);
       addItemToInfoSection("manifest",payloadId,"Payload Mass (kg)",payload['payload_mass_kg']);
       addItemToInfoSection("manifest",payloadId,"Type of Object",payload['payload_type']);
       addItemToInfoSection("manifest",payloadId,"Target Orbit", payload['orbit']);
