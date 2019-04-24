@@ -1,10 +1,12 @@
 # Percival
 > ASP.NET MVC/JQuery SpaceX Data Aggregator
 
+Created as part of the interview process for [SetWorks](https://set-works.com) in March of 2019
+
 ## Running the program
 
 ### UNIX
-- Ensure you have ASP.NET Core 2 installed
+- Ensure you have [.NET Core 2.2][1] installed
 - Clone or download the repo
 - Navigate to Percival/ in the terminal
 - Use `dotnet run`
@@ -12,7 +14,7 @@
 
 ### Windows
 - Ensure you have Visual Studio installed
-- Ensure you have .NET Core 2.2 installed (https://dotnet.microsoft.com/download/dotnet-core/2.2)
+- Ensure you have [.NET Core 2.2][1] installed
 - Clone or download the repo
 - Open Percival/Percival.csproj as a project in Visual Studio
 - Run the project, Visual Studio should open a browser and direct you to the page
@@ -41,3 +43,5 @@ I also had to decide if Kendo Grid would be a good choice for the details pages,
 I thoroughly enjoyed this project. I gave myself a tight deadline to see if I would be able to make it, and had a fully functioning version nearly 2 days early (I still need to debug IE as of Saturday, because I've been on Linux). I had several friends tell me it was too large to be a "fair" test for any potential employment, but I view tests like these as a learning experience, and a way to learn what I don't know.
 
 Overall, the concept is an excellent idea, and the only issue with the project I would amend is the use of a paid library as a requirement. Support was somewhat difficult to use for Kendo, and there was far too much marketing material and far too little succinct but detailed documentation.
+
+[1]: https://dotnet.microsoft.com/download/dotnet-core/2.2
